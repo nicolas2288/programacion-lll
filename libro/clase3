@@ -1,0 +1,32 @@
+public class Main {
+    public static void main(String[] args) {
+        Libro[] biblioteca = new Libro[5]; 
+        libro[1] = new Libro("Don Quijote de la Mancha", "M. de Cervantes", 60000);
+        libro[2] = new Libro("La Odisea", "Homero", 45000);
+        libro[3] = new Libro("El Principito", 30000);
+        libro[4] = new Libro("Rayuela", "Julio Cortázar", 55000);
+
+        
+        mostrarLibros(biblioteca); 
+
+        double total = calcularPrecioTotal(biblioteca);
+        System.out.println("\nPrecio total de todos los libros: $" + total);
+    }
+
+    // Método que muestra los datos de cada libro recorriendo el arreglo
+    public static void mostrarLibros(Libro[] libros) {
+        System.out.println("=== Información de los libros ===");
+        for (int i = 0; i < libros.length; i++) {
+            libros[i].mostrarInfo();
+        }
+    }
+
+    // 🔹 Método que suma el precio de todos los libros del arreglo
+    public static double calcularPrecioTotal(Libro[] libros) {
+        double acumulado = 0;
+        for (int i = 0; i < libros.length; i++) {
+            acumulado += libros[i].getPrecio();
+        }
+        return acumulado;
+    }
+}
