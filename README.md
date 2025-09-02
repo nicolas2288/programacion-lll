@@ -35,12 +35,11 @@ public class Main {
         
         mostrarLibros(biblioteca);
 
-        // 2.4 Calcular e imprimir el precio total (SIN STREAMS)
+        
         double total = calcularPrecioTotal(biblioteca);
         System.out.println("\nPrecio total de todos los libros: $" + total);
     }
 
-    // Recorre el arreglo con un for y muestra cada libro
     public static void mostrarLibros(Libro[] libros) {
         System.out.println("=== Información de los libros ===");
         for (int i = 0; i < libros.length; i++) {
