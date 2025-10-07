@@ -1,0 +1,10 @@
+public class ejercicio3 {
+    public static boolean compararRaiz(int a, int b) {
+        return Math.abs(Math.sqrt(a) - Math.cbrt(b)) < 0.001;
+    }
+    public static void main(String[] args) {
+        System.out.println(compararRaiz(4, 8));
+        System.out.println(compararRaiz(16, 48));
+        System.out.println(compararRaiz(9, 27));
+    }
+}
