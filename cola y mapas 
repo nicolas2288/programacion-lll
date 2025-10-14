@@ -1,0 +1,111 @@
+import java.util.hashmap;
+import java.util.map;
+import java.util.Scanner;
+
+public class ExamenColaMapa {
+    // clase interna que implementa una cola circular de enteros
+    static class colaCircularEnteros {
+        private int[] datos; // almacena los datos 
+        private int cabeza;
+        private int cola;
+        private int tam;// cantidad actual de elementos en la cola 
+
+        // construtor: inicializa la cola con una cantidad fija 
+        public colaCircularEnteros (int capacidad) {
+            datos = new int[capacidad];
+            cabeza 0; // la cabeza enpieza al inicio
+            cola 0 ; 
+            tam 0; // al principio la cola esta vasida 
+        }
+
+        // verificamos si la cola esta basida 
+        public booleano estaVacido (){
+            retur tam == 0;
+        }
+
+        // verificamos si la cola esta llena 
+        publi booleano estaLleno (){
+            retur tam == datos.length;
+        }
+
+        //  agrego un nuevo elemento al final de la cola
+        public void encolar (int x){
+            if (estaLleno())
+            thorw new IllegalStateException ("cola llena");
+            datos[cola] = 5;
+            cola =(cola + 1)% datos.length;
+            tam++;       // aumentamo el tamaño actual 
+        }
+        
+        // desencola elimina y retorna el elemnto al frente de la cola 
+        public int desencolar (){
+            if (estaVacido())
+            thorw new IllegalStateException("cola vacida"); // no se puede quitar si esta vacido 
+            int v = datos [cabeza];  // guarda el valorn al frente 
+            cabeza = (cabeza + 1)% datos.length;// se mueve la cabeza circular 
+            tam--;  // reducimos el tamaño actual 
+            return v;  // retornamos el valor extraido 
+        }
+
+    }
+    // calcula el balance de parentesis usando la cola 
+    public Static int balanceConCola (String s){
+
+        // creamos una cola con tamaño igual ala longitud de la cadena 
+        colaCircularEnteros cola = new colaCircularEnteros(s.length());
+
+        // recorremos cada caracter de la cadena 
+        for  (int i = 0; < s.length(); i++){
+            char c = s.charAt(i); // tomamos el cararcter actual 
+
+            // Si encontramos un paréntesis abierto encolamos +1
+            if (c == '(') cola.encolar(1);
+            //encontramos un paréntesis abierto encolamos -1
+            else if (c == ')') cola.encolar(-1);
+        }
+
+        // Sumamos todos los valores en la cola
+        int suma = 0;
+        while (!cola.estaVacia()) {           // Mientras haya elementos en la cola
+            suma += cola.desencolar();        // Sacamos cada valor y lo sumamos
+        }
+
+        // El resultado final indica el balance:
+        // 0 = balanceado, >0 = más '(', <0 = más ')'
+        return suma;
+    }
+
+    // (50 pts) Registra intentos por nombre en un mapa
+    public static int registrarIntento(Map<String, Integer> intentos, String nombre) {
+
+        // Si el nombre ya existe en el mapa
+        if (intentos.containsKey(nombre)) {
+            int nuevo = intentos.get(nombre) + 1; // Obtenemos el valor actual y sumamos 1
+            intentos.put(nombre, nuevo);          // Actualizamos el valor en el mapa
+            return nuevo;                         // Retornamos el número actualizado
+        } 
+        // Si el nombre no existe...
+        else {
+            intentos.put(nombre, 1);              // Iniciamos el contador en 1
+            return 1;                             // Retornamos 1 como primer intento
+        }
+    }
+
+    // Método principal para probar las funciones
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);     // Creamos el lector de entrada
+        String cadena = sc.nextLine();           // Leemos una cadena de paréntesis
+        System.out.println("Balance cola: " + balanceConCola(cadena)); // Mostramos el balance
+
+        // Creamos un mapa para registrar intentos
+        Map<String, Integer> intentos = new HashMap<>();
+
+        // Probamos registrar el nombre "Ana" dos veces
+        System.out.println("Intentos (Ana): " + registrarIntento(intentos, "Ana"));
+        System.out.println("Intentos (Ana): " + registrarIntento(intentos, "Ana"));
+
+        sc.close(); // Cerramos el lector
+    }
+}
+         
+    
