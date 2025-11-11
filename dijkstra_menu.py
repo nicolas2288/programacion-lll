@@ -1,5 +1,4 @@
 # ALGORITMO DE DIJKSTRA
-# Autor: Nicolás Carabalí 
 # Este programa permite crear un grafo con 6 nodos
 # y calcular las rutas más cortas desde un nodo inicial
 # usando el algoritmo de Dijkstra.
