@@ -1,130 +1,130 @@
-# ---------------------------------------------
-# PROGRAMA: Algoritmo de Dijkstra (Ejemplo del grafo de la imagen)
-# Autor: Nicolás
-# Materia: Programación III
-# Descripción:
-# Este programa implementa el algoritmo de Dijkstra
-# para encontrar el camino más corto entre nodos numerados (1 a 6)
-# tal como el grafo mostrado en la imagen del ejemplo.
-# ---------------------------------------------
+# ALGORITMO DE DIJKSTRA
+# Autor: Nicolás Carabalí 
+# Este programa permite crear un grafo con 6 nodos
+# y calcular las rutas más cortas desde un nodo inicial
+# usando el algoritmo de Dijkstra.
 
-import heapq  # Librería para usar colas de prioridad (elige el menor camino automáticamente)
+# Importa la librería heapq para usar una cola de prioridad (min-heap)
+import heapq  # Librería para manejar colas de prioridad 
 
-# Clase Grafo: representa el conjunto de nodos y conexiones (aristas)
+# Clase que representa el Grafo
 class Grafo:
+    # Constructor de la clase Grafo
     def __init__(self):
-        # Diccionario: cada nodo guarda una lista de vecinos con el peso (distancia)
+        # Diccionario donde cada nodo tendrá una lista de sus conexiones 
         self.nodos = {}
 
-    def agregar_nodo(self, nodo):
-        if nodo not in self.nodos:
-            self.nodos[nodo] = []
-
+    # Método para agregar una conexión entre dos nodos con un peso
     def agregar_arista(self, origen, destino, peso):
-        self.agregar_nodo(origen)
-        self.agregar_nodo(destino)
-        # Se agrega conexión ida y vuelta
+        # Si el nodo origen no existe aún, crear su entrada en el diccionario
+        if origen not in self.nodos:
+            self.nodos[origen] = []
+        # Si el nodo destino no existe aún, crear su entrada en el diccionario
+        if destino not in self.nodos:
+            self.nodos[destino] = []
+        # Agregar la conexión del origen al destino con el peso indicado
         self.nodos[origen].append((destino, peso))
+        # Agregar la conexión del destino al origen (grafo no dirigido)
         self.nodos[destino].append((origen, peso))
 
-    # Algoritmo de Dijkstra
+    # Algoritmo de Dijkstra para encontrar caminos más cortos desde 'inicio'
     def dijkstra(self, inicio):
-        # Distancias iniciales: todas son infinitas excepto el nodo de inicio (0)
+        # Crear un diccionario de distancias e inicializar todas a infinito
         distancias = {nodo: float('inf') for nodo in self.nodos}
-        distancias[inicio] = 0
+        # La distancia desde el inicio a sí mismo es 0
+        distancias[inicio] = 0  # La distancia del inicio a sí mismo es 0
 
-        # Cola de prioridad con (distancia, nodo)
-        cola = [(0, inicio)]
+        # Cola de prioridad (min-heap) que guarda tuplas (distancia, nodo)
+        cola_prioridad = [(0, inicio)]
 
-        while cola:
-            distancia_actual, nodo_actual = heapq.heappop(cola)
+        # Mientras la cola no esté vacía, seguimos procesando nodos
+        while cola_prioridad:
+            # Sacar el elemento con menor distancia conocida
+            distancia_actual, nodo_actual = heapq.heappop(cola_prioridad)
 
-            # Si ya hay una mejor distancia guardada, se ignora
+            # Si la distancia sacada es mayor a la ya guardada, la ignoramos
             if distancia_actual > distancias[nodo_actual]:
                 continue
 
-            # Recorre los vecinos del nodo actual
+            # Recorremos cada vecino del nodo actual
             for vecino, peso in self.nodos[nodo_actual]:
-                nueva_distancia = distancia_actual + peso
-                if nueva_distancia < distancias[vecino]:
-                    distancias[vecino] = nueva_distancia
-                    heapq.heappush(cola, (nueva_distancia, vecino))
+                # Calculamos la distancia pasando por el nodo actual al vecino
+                distancia_nueva = distancia_actual + peso
+                # Si la nueva distancia es mejor que la almacenada, la actualizamos
+                if distancia_nueva < distancias[vecino]:
+                    distancias[vecino] = distancia_nueva
+                    # Insertamos en la cola la nueva distancia para procesarla luego
+                    heapq.heappush(cola_prioridad, (distancia_nueva, vecino))
 
+        # Devolvemos el diccionario con las distancias mínimas encontradas
         return distancias
 
-
-
-# FUNCIÓN PRINCIPAL
+# Función principal del programa
 def main():
+    # Crear el grafo donde guardaremos las aristas y nodos
     grafo = Grafo()
-    # 1 → 2 (2)
+    # Agregar las aristas con sus pesos 
     grafo.agregar_arista(1, 2, 2)
-    # 1 → 3 (1)
     grafo.agregar_arista(1, 3, 1)
-    # 2 → 4 (1)
     grafo.agregar_arista(2, 4, 1)
-    # 4 → 6 (2)
-    grafo.agregar_arista(4, 6, 2)
-    # 4 → 3 (3)
-    grafo.agregar_arista(4, 3, 3)
-    # 3 → 5 (4)
-    grafo.agregar_arista(3, 5, 4)
-    # 5 → 6 (2)
-    grafo.agregar_arista(5, 6, 2)
+    grafo.agregar_arista(3, 4, 2)
+    grafo.agregar_arista(4, 5, 2)
+    grafo.agregar_arista(5, 6, 3)
+    grafo.agregar_arista(3, 6, 4)
 
-    print("===== ALGORITMO DE DIJKSTRA =====")
-    print("Grafo cargado con los nodos (1 al 6) del ejemplo.\n")
+    # Bucle principal que muestra el menú hasta que el usuario decida salir
+    while True:
+        # Mostrar las opciones disponibles en pantalla
+        print("\n--- MENÚ ---")
+        print("1. Mostrar todas las conexiones del grafo")
+        print("2. Calcular el camino más corto desde un nodo")
+        print("3. Salir")
 
-# Bucle principal del programa que muestra el menú continuamente
-while True:
-    print("\n--- MENÚ ---")
-    print("1. Mostrar todas las conexiones del grafo")
-    print("2. Calcular el camino más corto desde un nodo")
-    print("3. Salir")
+        # Leer la opción elegida por el usuario
+        opcion = input("Seleccione una opción: ")
 
-    # El usuario elige una opción del menú
-    opcion = input("Seleccione una opción: ")
+        # Si el usuario elige la opción 1: mostramos las conexiones
+        if opcion == "1":
+            # Mensaje encabezado para la lista de conexiones
+            print("\nConexiones del grafo:")
+            # Recorrer el diccionario de nodos e imprimir cada entrada
+            for nodo, vecinos in grafo.nodos.items():
+                print(f"{nodo} -> {vecinos}")
 
-    # Opción 1: Mostrar las conexiones del grafo (todos los nodos y sus vecinos)
-    if opcion == "1":
-        print("\nConexiones del grafo:")
-        for nodo, vecinos in grafo.nodos.items():
-            # Muestra cada nodo y las conexiones que tiene (sus vecinos)
-            print(f"{nodo} -> {vecinos}")
+        # Si el usuario elige la opción 2: calcular caminos más cortos
+        elif opcion == "2":
+            try:
+                # Pedir al usuario el número del nodo inicial y convertirlo a entero
+                inicio = int(input("Ingrese el número del nodo inicial (1-6): "))
 
-    # Opción 2: Calcular los caminos más cortos desde un nodo inicial
-    elif opcion == "2":
-        try:
-            # Se pide al usuario el número del nodo de inicio
-            inicio = int(input("Ingrese el número del nodo inicial (1-6): "))
+                # Comprobar que el nodo ingresado exista en el grafo
+                if inicio not in grafo.nodos:
+                    # Si no existe, informar y volver al menú
+                    print("Ese nodo no existe. Intente con uno del 1 al 6.")
+                    continue
 
-            # Si el nodo no existe en el grafo, se muestra un mensaje de error
-            if inicio not in grafo.nodos:
-                print(" Ese nodo no existe.")
-                continue  # vuelve al menú
+                # Ejecutar Dijkstra para obtener las distancias desde 'inicio'
+                distancias = grafo.dijkstra(inicio)
+                # Mostrar los resultados en pantalla
+                print(f"\nDistancias más cortas desde el nodo {inicio}:")
+                for nodo, distancia in distancias.items():
+                    print(f"  Hasta {nodo}: {distancia}")
 
-            # Se aplica el algoritmo de Dijkstra desde el nodo inicial
-            distancias = grafo.dijkstra(inicio)
+            # Capturar el error si el usuario no ingresa un número válido
+            except ValueError:
+                print("Debe ingresar un número válido.")
 
-            # Se muestran las distancias más cortas desde el nodo elegido
-            print(f"\nDistancias más cortas desde el nodo {inicio}:")
-            for nodo, distancia in distancias.items():
-                print(f"  Hasta {nodo}: {distancia}")
+        # Si el usuario elige la opción 3: salir del programa
+        elif opcion == "3":
+            # Mensaje de cierre personalizado 
+            print("Fin del programa. Desarrollado por Nicolás Carabalí.")
+            # Romper el bucle y terminar la ejecución
+            break
 
-        # Si el usuario ingresa algo que no es número, muestra error
-        except ValueError:
-            print(" Debe ingresar un número válido.")
+        # Si la opción no es 1, 2 ni 3, mostramos mensaje de error
+        else:
+            print("Opción no válida. Intente de nuevo.")
 
-    # Opción 3: salir del programa
-    elif opcion == "3":
-        print(" Programa finalizado.")
-        break  # termina el ciclo y finaliza el programa
-
-    # Si el usuario escribe otra cosa que no es 1, 2 o 3
-    else:
-        print(" Opción no válida. Intente de nuevo.")
-
-# EJECUCIÓN DEL PROGRAMA
-# Este bloque asegura que el programa se ejecute correctamente al iniciar
+# EJECUCIÓN DEL PROGRAMA: este bloque ejecuta main() al correr el archivo
 if __name__ == "__main__":
     main()
