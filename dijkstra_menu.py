@@ -1,4 +1,4 @@
-// ALGORITMO DE DIJKSTRA
+# ALGORITMO DE DIJKSTRA
 // Este programa permite crear un grafo con 6 nodos
 // y calcular las rutas más cortas desde un nodo inicial
 
